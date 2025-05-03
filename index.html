@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Images API Integration</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Animate.css -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+  <!-- Bootstrap Icons -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+  <link rel="stylesheet" href="./style.css">
+
+  <style>
+    /* 3D Background Parallax */
+    body {
+      position: relative;
+      background: #0f2027; /* fallback */
+      background: linear-gradient(to right, #0f2027, #203a43, #2c5364);
+      overflow-x: hidden;
+    }
+  
+    body::before {
+      content: "";
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 200%;
+      background: url('https://www.transparenttextures.com/patterns/cubes.png');
+      opacity: 0.05;
+      z-index: -1;
+      transform: translateZ(-1px) scale(2);
+      background-size: cover;
+      animation: floatBG 60s linear infinite;
+    }
+  
+    @keyframes floatBG {
+      from {
+        transform: translateY(0) scale(2);
+      }
+      to {
+        transform: translateY(-500px) scale(2);
+      }
+    }
+
+    /* Topbar */
+    .topbar {
+      background: linear-gradient(135deg, #00F260, #0575E6);
+      color: white;
+      padding: 3rem 1rem;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+    }
+
+    .topbar::after {
+      content: "";
+      position: absolute;
+      top: -50px;
+      right: -50px;
+      width: 200px;
+      height: 200px;
+      background: radial-gradient(circle, rgba(255,255,255,0.05), transparent 70%);
+      border-radius: 50%;
+      animation: rotateBlob 20s linear infinite;
+      z-index: 0;
+    }
+
+    @keyframes rotateBlob {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    .topbar h1, .topbar p, .topbar .author {
+      position: relative;
+      z-index: 1;
+    }
+
+    .topbar h1 {
+      font-size: 2.7rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      text-shadow: 2px 2px 8px rgba(0,0,0,0.4);
+    }
+
+    .topbar p {
+      font-size: 1.1rem;
+      color: #e0e0e0;
+    }
+
+    .topbar .author {
+      position: absolute;
+      bottom: 10px;
+      right: 20px;
+      font-size: 0.95rem;
+      font-style: italic;
+      color: #ffdd57;
+      background-color: rgba(0, 0, 0, 0.3);
+      padding: 0.4rem 0.8rem;
+      border-radius: 8px;
+    }
+
+    /* Cards */
+    .card {
+      border: 2px solid #dee2e6;
+      border-radius: 12px;
+      overflow: hidden;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      background-color: #fff;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    }
+
+    .card:hover {
+      transform: scale(1.03);
+      box-shadow: 0 8px 18px rgba(0, 0, 0, 0.1);
+      border-color: #ffc107;
+    }
+
+    .card-img-top {
+      transition: transform 0.3s ease;
+      border-bottom: 3px solid #f1f1f1;
+    }
+
+    .card:hover .card-img-top {
+      transform: scale(1.05);
+    }
+
+    .card-body {
+      background-color: #f8f9fa;
+    }
+
+    /* Animation */
+    .fade-in {
+      opacity: 0;
+      transform: translateY(20px);
+      animation: fadeInUp 0.8s ease forwards;
+    }
+
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* Footer */
+    footer {
+      background: linear-gradient(135deg, #141e30, #243b55);
+      color: white;
+      padding: 2.5rem 1rem;
+      text-align: center;
+    }
+
+    footer p {
+      margin: 0.3rem 0;
+      font-size: 1rem;
+    }
+
+    footer a {
+      color: #ffca2c;
+      font-weight: 600;
+      text-decoration: none;
+    }
+
+    footer a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Topbar -->
+  <div class="topbar">
+    <h1><i class="bi bi-images me-2"></i>Featured Programming Images</h1>
+    <p>Explore a curated collection of inspiring programming-related visuals.</p>
+    <div class="search-box mt-4">
+        <form class="d-flex justify-content-center" id="searchForm">
+          <div class="input-group w-75 w-md-50">
+            <input class="form-control form-control-lg rounded-start-pill border-0 shadow-sm" type="search" placeholder="Search images..." aria-label="Search" id="searchInput">
+            <span class="input-group-text bg-white border-0 rounded-end-pill">
+              <i class="bi bi-search text-muted"></i>
+            </span>
+          </div>
+        </form>
+      </div>
+  </div>
+
+
+  <!-- Banner Section -->
+<div class="banner-section text-center text-white position-relative">
+  <div class="banner-overlay"></div>
+  
+</div>
+
+</div>
+
+
+  <!-- Image Cards -->
+  <div class="container py-5">
+    <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4" id="all-data">
+      <!-- JS will inject cards here -->
+    </div>
+  </div>
+
+  <!-- Modal Preview -->
+  <div class="modal fade" id="imageModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+      <div class="modal-content text-center">
+        <div class="modal-body">
+          <img src="" alt="Large preview" id="modalImage" class="img-fluid rounded">
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer>
+    <p>&copy; 2025 Programming Image Gallery</p>
+    <p>Designed & Developed by <a href="#">Syed Ghina-Ul-Hassan</a> — All Rights Reserved</p>
+  </footer>
+
+  <!-- Bootstrap JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
+  <!-- Script Injection -->
+  <script src="./script.js"></script>
+
+  <!-- Animation Observer -->
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("fade-in");
+            observer.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.1 });
+
+      setInterval(() => {
+        document.querySelectorAll("#all-data .card").forEach(card => {
+          if (!card.classList.contains("fade-in")) {
+            observer.observe(card);
+          }
+        });
+      }, 500);
+    });
+  </script>
+
+</body>
+</html>
